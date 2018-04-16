@@ -1,1 +1,1 @@
-# airflow-workshop-pydata-london-2018
+# Apache Airflow in the Cloud Workshop PyData London 2018
