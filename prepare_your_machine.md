@@ -69,5 +69,5 @@ Note that this will only install the Python packages needed to talk to some exte
 
 The current list of `extras` is available [here](https://github.com/apache/incubator-airflow/blob/master/setup.py) and an older version can be found in the [docs](https://airflow.incubator.apache.org/installation.html#extra-packages).
 
-References:
+### References:
 * [Installing Airflow - Official Docs](https://airflow.incubator.apache.org/installation.html)
