@@ -1,20 +1,20 @@
-from airflow.operators import PythonOperator
-from airflow.operators import BashOperator
-from airflow.models import DAG
-from datetime import datetime, timedelta
+# import in-built module 
 import sys
 import time
+import os 
+import csv
 
-dagid   = 'DA' + str(int(time.time()))
-taskid  = 'TA' + str(int(time.time()))
+# import airflow module and operator
+from airflow.operators.python_operator import PythonOperator
+from airflow.operators.bash_operator import BashOperator
+from airflow.operators.dummy_operator import DummyOperator
+from airflow.models import DAG
+from datetime import datetime, timedelta
 
-input_file = '/home/directory/airflow/textfile_for_dagids_and_schedule'
+# Absolute path for config file
+input_file = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'example_cfg.csv')
 
-def my_sleeping_function(random_base):
-    '''This is a function that will run within the DAG execution'''
-    time.sleep(random_base)
-
-def_args = {
+dag_args = {
     'owner': 'airflow',
     'depends_on_past': False,
     'start_date': datetime.today(), 'email_on_failure': False,                
@@ -22,36 +22,43 @@ def_args = {
 }
 
 dag = DAG(
-    dag_id=dagid, 
-    default_args=def_args,
+    dag_id='Dynamic_dag_example', 
+    default_args=dag_args,
     )
 
+i = 0 # Counter for dummy variable 
+
 with open(input_file,'r') as f:
-    for line in f:
-        args = line.strip().split('\t')
-    if len(args) < 2:
-        continue
-    taskid = args[0]
-    argument = args[1]
-    type_arg = args[2]
+    reader = csv.reader(f)
+    for line in reader:
+        taskid = line[0]
+        argument = line[1]
+        type_arg = line[2]
+        t1 = DummyOperator(
+                task_id='dummy_dag_{}'.format(i),
+                dag=dag
+                )
+        i = i + 1
+        t2 = DummyOperator(
+                task_id='dummy_dag_{}'.format(i),
+                dag=dag
+                )
 
-    t1 = DummyOperator(
-    task_id='extract_data',
-    dag=dag
+        if type_arg == 'slp':
+            myBashTask = BashOperator(
+                task_id='task_sleep_{}'.format(i),
+                bash_command='sleep {{ sleep }}',
+                params={'sleep' : int(argument)},
+                dag=dag)
+        elif type_arg == 'ech':
+            myBashTask = BashOperator(
+                task_id='task_echo_{}'.format(i),
+                bash_command='echo {{ prt }}',
+                params={'prt' : str(argument)},
+                dag=dag)
 
-    if type_arg == 'sleep':
-        myBashTask = BashOperator(
-            task_id=taskid,
-            bash_command='sleep {{ sleep }}',
-            params = {'sleep' : int(argument)}
-            dag=dag)
-    else:
-        myBashTask = BashOperator(
-            task_id=taskid,
-            bash_command='echo {{ prt }}',
-            params = {'prt' : str(argument)}
-            dag=dag)
-
-    t1 >> myBashTask
+        t1 >> myBashTask >> t2        
+        # myBashTask.set_upstream(t1)
+        # t2.set_upstream(myBashTask)
 
 f.close()
