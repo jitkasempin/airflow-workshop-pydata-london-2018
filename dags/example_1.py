@@ -23,7 +23,7 @@ default_args = {
     'retry_delay': timedelta(minutes=5),
 }
 
-with DAG('airflow_tutorial_v01',
+with DAG('DAG_1_airflow_tutorial',
          default_args=default_args,
          # schedule_interval='0 * * * *',
          ) as dag:

@@ -1,0 +1,8 @@
+{
+    "bq_destination_dataset_table": "pydata_airflow.usa_names", 
+    "gcp_project_id": "sb01-185511", 
+    "gcs_dir": "example_3/", 
+    "gcs_landing_bucket": "sbo1input", 
+    "schema_gcs_path": "example_3/schema.json", 
+    "user_name": null
+}

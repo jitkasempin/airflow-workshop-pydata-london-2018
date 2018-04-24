@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 DAG Function:   This DAG does the following:
                 1) Waits for the files to be uploaded to a folder in a landing GCS bucket (Data Lake).
@@ -42,7 +41,7 @@ default_args = {
 # --------------------------------------------------------------------------------
 
 # 'project_id': The Project ID of the GCP Project. E.g. 'gcp01-165521'
-project_id = Variable.get('jl_gcp_project_id')
+project_id = Variable.get('gcp_project_id')
 
 bq_destination_dataset_table = Variable.get('bq_destination_dataset_table')
 
@@ -81,6 +80,7 @@ GCS_to_BigQuery = GoogleCloudStorageToBigQueryOperator(
     task_id='GCS_to_BigQuery',
     destination_project_dataset_table=bq_destination_dataset_table,
     bucket=gcs_bucket,
+    source_format="AVRO",
     source_objects=[os.path.join(gcs_dir, '*.avro')],
     # schema_object=schema_gcs_path,
     create_disposition='CREATE_IF_NEEDED',

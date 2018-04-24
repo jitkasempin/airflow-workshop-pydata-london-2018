@@ -19,7 +19,7 @@ dag_args = {
 }
 
 dag = DAG(
-    dag_id='Dynamic_dag_example',
+    dag_id='DAG_2_Dynamic_dag_example',
     default_args=dag_args,
 )
 
