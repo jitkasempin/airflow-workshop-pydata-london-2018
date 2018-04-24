@@ -49,6 +49,7 @@ bq_destination_dataset_table = Variable.get('bq_destination_dataset_table')
 gcs_bucket = Variable.get('gcs_landing_bucket')
 gcs_dir = Variable.get('gcs_dir')
 schema_gcs_path = Variable.get('schema_gcs_path')
+data_format = Variable.get('data_format')
 success_file = '_SUCCESS'
 
 # The credentials for service account. Create a connection in the WebUI and enter the name over here
@@ -58,7 +59,7 @@ google_cloud_conn_id = 'airflow-service-account'
 # Main DAG
 # --------------------------------------------------------------------------------
 
-dag = DAG('DAG_3_GCS_To_BigQuery',
+dag = DAG('DAG_3_GCS_To_BigQuery_CSV_AVRO',
           default_args=default_args,
           schedule_interval='@daily')
 
@@ -80,8 +81,10 @@ GCS_to_BigQuery = GoogleCloudStorageToBigQueryOperator(
     task_id='GCS_to_BigQuery',
     destination_project_dataset_table=bq_destination_dataset_table,
     bucket=gcs_bucket,
-    source_format="avro",
-    source_objects=[os.path.join(gcs_dir, '*.avro')],
+    source_format=data_format,
+    skip_leading_rows=1,
+    source_objects=[os.path.join(gcs_dir, '*.{}'.format(data_format))],
+    schema_object=schema_gcs_path,
     create_disposition='CREATE_IF_NEEDED',
     # The following values are supported for `create_disposition`:
     # CREATE_IF_NEEDED: If the table does not exist, BigQuery creates the table.

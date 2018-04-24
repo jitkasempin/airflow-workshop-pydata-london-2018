@@ -58,7 +58,7 @@ google_cloud_conn_id = 'airflow-service-account'
 # Main DAG
 # --------------------------------------------------------------------------------
 
-dag = DAG('DAG_3_GCS_To_BigQuery',
+dag = DAG('DAG_3_GCS_To_BigQuery_CSV',
           default_args=default_args,
           schedule_interval='@daily')
 
@@ -80,8 +80,10 @@ GCS_to_BigQuery = GoogleCloudStorageToBigQueryOperator(
     task_id='GCS_to_BigQuery',
     destination_project_dataset_table=bq_destination_dataset_table,
     bucket=gcs_bucket,
-    source_format="avro",
-    source_objects=[os.path.join(gcs_dir, '*.avro')],
+    source_format="csv",
+    skip_leading_rows=1,
+    source_objects=[os.path.join(gcs_dir, '*.csv')],
+    schema_object=schema_gcs_path,
     create_disposition='CREATE_IF_NEEDED',
     # The following values are supported for `create_disposition`:
     # CREATE_IF_NEEDED: If the table does not exist, BigQuery creates the table.
