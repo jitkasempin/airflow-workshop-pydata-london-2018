@@ -56,8 +56,6 @@ pip install apache-airflow[gcp_api]
 pip install apache-airflow[gcp_api]==1.9.0
 ```
 
-Note that this will only install the Python packages needed to talk to some external systems, but not these systems (MySQL needs to be installed separately by your method of choice.)
-
 The current list of `extras` is available [here](https://github.com/apache/incubator-airflow/blob/master/setup.py) and an older version can be found in the [docs](https://airflow.incubator.apache.org/installation.html#extra-packages).
 
 ### References:
