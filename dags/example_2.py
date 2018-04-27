@@ -44,13 +44,13 @@ with open(input_file, 'r') as f:
         if type_arg == 'slp':
             myBashTask = BashOperator(
                 task_id='task_sleep_{}'.format(i),
-                bash_command='sleep {{ sleep }}',
+                bash_command='sleep {{ params.sleep }}',
                 params={'sleep': int(argument)},
                 dag=dag)
         elif type_arg == 'ech':
             myBashTask = BashOperator(
                 task_id='task_echo_{}'.format(i),
-                bash_command='echo {{ prt }}',
+                bash_command='echo {{ params.prt }}',
                 params={'prt': str(argument)},
                 dag=dag)
 
