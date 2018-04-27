@@ -1,9 +1,9 @@
 {
-    "bq_destination_dataset_table": "pydata_airflow.usa_names", 
+    "bq_destination_dataset_table": "pydata_airflow.kaxil_usa_names", 
     "data_format": "avro", 
-    "gcp_project_id": "sb01-185511", 
+    "gcp_project_id": "pydata2018-airflow", 
     "gcs_dir": "example_3/avro/",
-    "gcs_landing_bucket": "sbo1input", 
+    "gcs_landing_bucket": "pydata_airflow", 
     "schema_gcs_path": "example_3/csv/schema.json", 
     "user_name": null
 }
